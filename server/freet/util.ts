@@ -9,6 +9,10 @@ type FreetResponse = {
   dateCreated: string;
   content: string;
   dateModified: string;
+  circle: string;
+  anonymous: boolean;
+  private: boolean;
+  authorId: string;
 };
 
 /**
@@ -32,14 +36,18 @@ const constructFreetResponse = (freet: HydratedDocument<Freet>): FreetResponse =
       versionKey: false // Cosmetics; prevents returning of __v property
     })
   };
-  const {username} = freetCopy.authorId;
-  delete freetCopy.authorId;
+  const usernameDisplay = freetCopy.authorId ? freetCopy.authorId.username : undefined;
+  // delete freetCopy.authorId;
   return {
     ...freetCopy,
     _id: freetCopy._id.toString(),
-    author: username,
+    authorId: freetCopy.authorId._id.toString(),
+    author: freet.anonymous ? "Anonymous" : usernameDisplay,
     dateCreated: formatDate(freet.dateCreated),
-    dateModified: formatDate(freet.dateModified)
+    dateModified: formatDate(freet.dateModified),
+    circle: freetCopy.circle ? freetCopy.circle.name : "everyone",
+    anonymous: freetCopy.anonymous,
+    private: freetCopy.private
   };
 };
 

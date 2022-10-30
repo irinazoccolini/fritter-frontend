@@ -19,18 +19,35 @@ class FreetCollection {
    * @param {string} content - The id of the content of the freet
    * @return {Promise<HydratedDocument<Freet>>} - The newly created freet
    */
-  static async addOne(authorId: Types.ObjectId | string, content: string): Promise<HydratedDocument<Freet>> {
+   static async addOne(authorId: Types.ObjectId | string, content: string, anonymous: boolean, 
+    circle: Types.ObjectId | string | undefined): Promise<HydratedDocument<Freet>> {
     const date = new Date();
-    const freet = new FreetModel({
-      authorId,
-      dateCreated: date,
-      content,
-      dateModified: date
-    });
-    await freet.save(); // Saves freet to MongoDB
-    return freet.populate('authorId');
+    if (circle){
+      const freet = new FreetModel({
+        authorId,
+        dateCreated: date,
+        content,
+        dateModified: date,
+        circle: circle,
+        anonymous: anonymous,
+        private: false
+      });
+      await freet.save(); // Saves freet to MongoDB
+      return freet.populate(['authorId', 'circle']);
+    } else {
+      const freet = new FreetModel({
+        authorId,
+        dateCreated: date,
+        content,
+        dateModified: date,
+        anonymous: anonymous,
+        private: false
+      });
+      await freet.save(); // Saves freet to MongoDB
+      return freet.populate(['authorId', 'circle']);
+    }
   }
-
+  
   /**
    * Find a freet by freetId
    *
@@ -38,7 +55,7 @@ class FreetCollection {
    * @return {Promise<HydratedDocument<Freet>> | Promise<null> } - The freet with the given freetId, if any
    */
   static async findOne(freetId: Types.ObjectId | string): Promise<HydratedDocument<Freet>> {
-    return FreetModel.findOne({_id: freetId}).populate('authorId');
+    return FreetModel.findOne({_id: freetId}).populate(['authorId', 'circle']);
   }
 
   /**
@@ -48,7 +65,7 @@ class FreetCollection {
    */
   static async findAll(): Promise<Array<HydratedDocument<Freet>>> {
     // Retrieves freets and sorts them from most to least recent
-    return FreetModel.find({}).sort({dateModified: -1}).populate('authorId');
+    return FreetModel.find({}).sort({dateModified: -1}).populate(['authorId', 'circle']);
   }
 
   /**
@@ -59,7 +76,7 @@ class FreetCollection {
    */
   static async findAllByUsername(username: string): Promise<Array<HydratedDocument<Freet>>> {
     const author = await UserCollection.findOneByUsername(username);
-    return FreetModel.find({authorId: author._id}).sort({dateModified: -1}).populate('authorId');
+    return FreetModel.find({authorId: author._id}).sort({dateModified: -1}).populate(['authorId', 'circle']);
   }
 
   /**
@@ -74,7 +91,7 @@ class FreetCollection {
     freet.content = content;
     freet.dateModified = new Date();
     await freet.save();
-    return freet.populate('authorId');
+    return freet.populate(['authorId', 'circle']);
   }
 
   /**
@@ -93,8 +110,67 @@ class FreetCollection {
    *
    * @param {string} authorId - The id of author of freets
    */
-  static async deleteMany(authorId: Types.ObjectId | string): Promise<void> {
-    await FreetModel.deleteMany({authorId});
+  static async deleteManyByAuthorId(authorId: Types.ObjectId | string): Promise<void> {
+    await FreetModel.deleteMany({authorId: authorId});
+  }
+
+  /**
+   * Find all freets for a given circle
+   * 
+   * @param {string} circleId - the id of the circle
+   * @return {Promise<HydratedDocument<Freet>[]>} - An array of all of the freets
+   */
+  static async findManyByCircle(circleId: Types.ObjectId | string): Promise<Array<HydratedDocument<Freet>>>{
+    return FreetModel.find({circle: circleId}).populate(["circle", "authorId"]);
+  }
+
+  /** 
+   * Private freets for a given circle
+   * 
+   * @param {string} circleId - the id of the circle
+   */
+  static async privateManyByCircle(circleId: Types.ObjectId | string): Promise<void>{
+    await FreetModel.updateMany({circle:circleId}, {private: true, dateModified: new Date()});
+  }
+
+  /**
+   * Find visible freets based on a list of circle ids and which freets are public
+   * 
+   * @param {Types.ObjectId[]} circleIds - list of circle ids
+   */
+  static async findVisibleFreetsByAuthor(circleIds: Types.ObjectId[], authorId: Types.ObjectId):  Promise<Array<HydratedDocument<Freet>>> {
+    return FreetModel.find({
+      circle: {
+        $in: circleIds.concat([null])
+      },
+      authorId: authorId,
+      private: false,
+      anonymous: false
+    }).sort({dateModified: -1}).populate(["circle", "authorId"]);
+  }
+
+  static async findFollowingFeedFreets(circleIds: Types.ObjectId[], following: Types.ObjectId[]): Promise<Array<HydratedDocument<Freet>>>{
+    console.log(following)
+    console.log(circleIds)
+    return FreetModel.find({
+      circle: {
+        $in: circleIds.concat([null])
+      },
+      private: false,
+      anonymous: false,
+      authorId: {
+        $in: following
+      }
+    }).sort({dateModified: -1}).populate(["circle", "authorId"]);
+  }
+
+  static async findAllViewableFreets(circleIds: Types.ObjectId[]): Promise<Array<HydratedDocument<Freet>>>{
+    return FreetModel.find({
+      circle: {
+        $in: circleIds.concat([null])
+      },
+      private: false
+    }).sort({dateModified: -1}).populate(["circle", "authorId"]);
   }
 }
 

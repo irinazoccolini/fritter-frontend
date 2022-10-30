@@ -2,8 +2,13 @@ import type {Request, Response} from 'express';
 import express from 'express';
 import FreetCollection from '../freet/collection';
 import UserCollection from './collection';
+import FollowCollection from '../follow/collection';
 import * as userValidator from '../user/middleware';
+import * as followValidator from '../follow/middleware';
 import * as util from './util';
+import * as followUtil from '../follow/util';
+import ReplyCollection from '../reply/collection';
+import CircleCollection from '../circle/collection';
 
 const router = express.Router();
 
@@ -161,10 +166,125 @@ router.delete(
   async (req: Request, res: Response) => {
     const userId = (req.session.userId as string) ?? ''; // Will not be an empty string since its validated in isUserLoggedIn
     await UserCollection.deleteOne(userId);
-    await FreetCollection.deleteMany(userId);
+    await FreetCollection.deleteManyByAuthorId(userId);
+    await ReplyCollection.deleteManyByAuthor(userId);
+    const circles = await CircleCollection.findManyByCreatorId(userId);
+    for (const circle of circles){
+      await ReplyCollection.privateManyByCircle(circle._id);
+      await FreetCollection.privateManyByCircle(circle._id);
+    }
+    await CircleCollection.deleteManyByUser(userId);
     req.session.userId = undefined;
     res.status(200).json({
       message: 'Your account has been deleted successfully.'
+    });
+  }
+);
+
+/**
+ * Follow a user.
+ * 
+ * @name POST /api/users/:username/followers
+ * 
+ * @return {Follow} - the newly created follow
+ * @throws {403} - if the user is not logged in
+ * @throws {404} - if the given user id doesn't exist
+ */
+ router.post(
+  '/:username?/followers',
+  [
+    userValidator.isUserLoggedIn,
+    userValidator.isUsernameInParamsExists,
+    followValidator.isFollowNotExists,
+    followValidator.isFollowable
+  ],
+  async (req: Request, res: Response) => {
+    const currentUser = await UserCollection.findOneByUserId(req.session.userId as string);
+    const userToFollow = await UserCollection.findOneByUsername(req.params.username as string);
+    const follow = await FollowCollection.addFollow(req.session.userId, userToFollow._id.toString());
+    const followInverse = await FollowCollection.findOneByFollowerAndFollowee(userToFollow._id.toString(), req.session.userId);
+    if (followInverse){
+      await CircleCollection.addMemberToMutuals(userToFollow._id, currentUser._id);
+      await CircleCollection.addMemberToMutuals(currentUser._id, userToFollow._id);
+    }
+    res.status(200).json({
+      message: "Your follow has been added successfully.",
+      follow: followUtil.constructFollowResponse(follow)
+    });
+  }
+);
+
+/**
+ * Unfollow a user
+ * 
+ * @name DELETE /api/users/:username/followers
+ * 
+ * @return {string} - a sucess message
+ * @throws {403} - if the user is not logged in
+ * @throws {404} - if the given user id doesn't exist
+ */
+router.delete(
+  '/:username?/followers',
+  [
+    userValidator.isUserLoggedIn,
+    userValidator.isUsernameInParamsExists,
+    followValidator.isFollowExists
+  ],
+  async(req: Request, res: Response) => {
+    const user = await UserCollection.findOneByUsername(req.params.username as string);
+    await FollowCollection.deleteFollow(req.session.userId, user._id.toString());
+    res.status(200).json({
+      message: "Your follow was deleted successfully."
+    });
+  }
+);
+
+/**
+ * Get all of a user's followers
+ * 
+ * @name GET /api/users/:username/followers
+ * 
+ * @return {Follow[]} - an array of the followers
+ * @throws {403} - if the user is not logged in
+ */
+router.get(
+  '/:username?/followers',
+  [
+    userValidator.isUserLoggedIn,
+    userValidator.isUsernameInParamsExists,
+  ],
+  async (req: Request, res: Response) => {
+    const user = await UserCollection.findOneByUsername(req.params.username as string);
+    const followers = await FollowCollection.findByFollowee(user._id.toString());
+    const followersResponse = followers.map(follower => followUtil.constructFollowResponse(follower))
+    res.status(200).json({
+      message: `Followers for user ${req.params.username} returned successfully.`,
+      followers: followersResponse
+    });
+  }
+);
+
+/**
+ * Get all the users that a user is following
+ * 
+ * @name GET /api/users/:username/following
+ * 
+ * @return {Follow[]} - an array of who the user follows
+ * @throws {403} - if the user is not logged in
+ */
+router.get(
+  '/:username?/following',
+  [
+    userValidator.isUserLoggedIn,
+    userValidator.isUsernameInParamsExists,
+  ],
+  async (req: Request, res: Response) => {
+    const user = await UserCollection.findOneByUsername(req.params.username as string);
+    const following = await FollowCollection.findByFollower(user._id.toString());
+    const followingResponse = following.map(follow => followUtil.constructFollowResponse(follow))
+    res.status(200).json({
+      message: `The users that user ${req.params.username} is following returned successfully.`,
+      followers: followingResponse
     });
   }
 );

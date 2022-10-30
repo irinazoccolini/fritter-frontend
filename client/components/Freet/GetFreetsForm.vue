@@ -18,7 +18,7 @@ export default {
         if (!r.ok) {
           throw new Error(res.error);
         }
-
+        console.log(res);
         this.$store.commit('updateFilter', this.value);
         this.$store.commit('updateFreets', res);
       } catch (e) {

@@ -11,13 +11,14 @@ export default {
       url: '/api/users/session',
       method: 'POST',
       hasBody: true,
-      setUsername: true,
+      setUser: true,
       fields: [
         {id: 'username', label: 'Username', value: ''},
         {id: 'password', label: 'Password', value: ''}
       ],
       title: 'Sign in',
       callback: () => {
+        console.log("in the callback")
         this.$router.push({name: 'Home'});
         this.$store.commit('alert', {
           message: 'You are now signed in!', status: 'success'

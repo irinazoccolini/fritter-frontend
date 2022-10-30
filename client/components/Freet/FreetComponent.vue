@@ -10,7 +10,7 @@
         @{{ freet.author }}
       </h3>
       <div
-        v-if="$store.state.username === freet.author"
+        v-if="$store.state.userId === freet.authorId"
         class="actions"
       >
         <button
