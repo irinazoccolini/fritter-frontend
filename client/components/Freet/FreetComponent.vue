@@ -35,6 +35,9 @@
           🗑️ Delete
         </button>
       </div>
+      <button @click="viewReplies">
+          View Replies
+        </button>
     </header>
     <textarea
       v-if="editing"
@@ -131,6 +134,17 @@ export default {
         }
       };
       this.request(params);
+    },
+    viewReplies() {
+      /**
+       * Updates the current freet in the store when we view replies.
+       */
+      // this.$store.commit('updateCurrentParentItem', this.freet);
+      // this.$store.commit('updateCurrentParentType', "freet");
+      // this.$store.commit('refreshReplies');
+      // console.log(this.$store.replies);
+      // console.log(this.$store.currentParentType);
+      this.$router.push(`/freet/${this.freet._id}/replies`);
     },
     async request(params) {
       /**

@@ -14,6 +14,7 @@ export default {
       fields: [
         {id: 'password', label: 'Password', value: ''}
       ],
+      knownFields: [],
       title: 'Change password',
       callback: () => {
         const message = 'Successfully changed password!';

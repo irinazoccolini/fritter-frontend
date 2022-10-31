@@ -16,6 +16,7 @@ export default {
         {id: 'username', label: 'Username', value: ''},
         {id: 'password', label: 'Password', value: ''}
       ],
+      knownFields: [],
       title: 'Create account',
       callback: () => {
         const message = 'Successfully created an account!';

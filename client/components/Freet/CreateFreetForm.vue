@@ -15,6 +15,7 @@ export default {
         {id: 'content', label: 'Content', value: ''},
         {id: 'anonymous', label: 'Anonymous', value: ''}
       ],
+      knownFields: [],
       title: 'Create a freet',
       refreshFreets: true,
       callback: () => {

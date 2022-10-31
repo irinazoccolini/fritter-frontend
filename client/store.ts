@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import createPersistedState from 'vuex-persistedstate';
-
+import router from "./router";
 Vue.use(Vuex);
 
 /**
@@ -13,7 +13,10 @@ const store = new Vuex.Store({
     freets: [], // All freets created in the app
     username: null, // Username of the logged in user
     alerts: {}, // global success/error messages encountered during submissions to non-visible forms
-    userId: null // User id of the logged in user
+    userId: null, // User id of the logged in user
+    currentParentItem: null, // The current item (freet or reply) that is being viewed 
+    currentParentType: null, // The current item type (freet or reply)
+    replies: []
   },
   mutations: {
     alert(state, payload) {
@@ -53,15 +56,56 @@ const store = new Vuex.Store({
        */
       state.freets = freets;
     },
+    updateCurrentParentItem(state, item){
+      /**
+       * Update the current item to the provided item.
+       * @param item - Freet or reply to store
+       */
+      state.currentParentItem = item;
+    },
+    updateCurrentParentType(state, type){
+      /**
+       * Update the current type to the provided type.
+       * @param type - Type ('freet' or 'reply') to store
+       */
+      state.currentParentType = type;
+    },
+    async refreshCurrentParentItem(state, itemId){
+      /**
+       * 
+       */
+      if (state.currentParentType == "freet") {
+        const url = `/api/freets/${itemId}`;
+        const res = await fetch(url).then(async r => r.json());
+        state.currentParentItem = res.freet;
+      } else if (state.currentParentType == "reply") {
+        const url = `/api/replies/${itemId}`;
+        const res = await fetch(url).then(async r => r.json());
+        state.currentParentItem = res.reply;
+      }
+    },
+    async refreshReplies(state, parentInfo){
+      /**
+       * Request the server for the currently available replies.
+       */
+       if (parentInfo[0] == "freet"){
+        const url = `/api/freets/${parentInfo[1]}/replies`;
+        const res = await fetch(url).then(async r => r.json());
+        state.replies = res;
+      } else if (parentInfo[0] == "reply"){
+        const url = `/api/replies/${parentInfo[1]}/replies`;
+        const res = await fetch(url).then(async r => r.json());
+        state.replies = res;
+      }
+    },
     async refreshFreets(state) {
       /**
        * Request the server for the currently available freets.
        */
       const url = state.filter ? `/api/users/${state.filter}/freets` : '/api/freets';
       const res = await fetch(url).then(async r => r.json());
-      console.log(state.freets);
       state.freets = res;
-    }
+    },
   },
   // Store data across page refreshes, only discard on browser close
   plugins: [createPersistedState()]

@@ -78,8 +78,6 @@ const router = express.Router();
         }
       }
       const visibleFreets = await FreetCollection.findVisibleFreetsByAuthor(overlappingCircleIds, author._id);
-      console.log("visislbe freets");
-      console.log(visibleFreets);
       const response = visibleFreets.map(util.constructFreetResponse);
       res.status(200).json(response);
     }
@@ -239,6 +237,7 @@ router.post(
     freetValidator.isValidFreetViewer
   ],
   async (req: Request, res: Response) => {
+    console.log("in the router")
     const replies = await ReplyCollection.findAllByParentFreet(req.params.freetId);
     const response = replies.map(replyUtil.constructReplyResponse);
     res.status(200).json(response);

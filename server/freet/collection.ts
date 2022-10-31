@@ -150,8 +150,6 @@ class FreetCollection {
   }
 
   static async findFollowingFeedFreets(circleIds: Types.ObjectId[], following: Types.ObjectId[]): Promise<Array<HydratedDocument<Freet>>>{
-    console.log(following)
-    console.log(circleIds)
     return FreetModel.find({
       circle: {
         $in: circleIds.concat([null])

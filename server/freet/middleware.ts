@@ -10,6 +10,7 @@ const isFreetExists = async (req: Request, res: Response, next: NextFunction) =>
   const validFormat = Types.ObjectId.isValid(req.params.freetId);
   const freet = validFormat ? await FreetCollection.findOne(req.params.freetId) : '';
   if (!freet) {
+    console.log("thinks the freet doesn't exist");
     res.status(404).json({
       error: `Freet with freet ID ${req.params.freetId} does not exist.`
     });

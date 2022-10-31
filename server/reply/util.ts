@@ -14,7 +14,8 @@ type ReplyResponse = {
   parentFreet: string;
   parentReply: string;
   circle: string;
-  private: Boolean
+  private: Boolean;
+  authorId: string;
 };
 
 /**
@@ -40,11 +41,12 @@ const constructReplyResponse = (reply: HydratedDocument<Reply>): ReplyResponse =
   };
 
   const usernameDisplay = replyCopy.authorId ? replyCopy.authorId.username : undefined;
-  delete replyCopy.authorId
+
   return {
     ...replyCopy,
     _id: replyCopy._id.toString(),
     author: replyCopy.anonymous ? "Anonymous" : usernameDisplay,
+    authorId: replyCopy.authorId._id.toString(),
     parentFreet: replyCopy.parentFreet ? replyCopy.parentFreet._id.toString() : undefined,
     parentReply: replyCopy.parentReply ? replyCopy.parentReply._id.toString() : undefined,
     dateCreated: formatDate(replyCopy.dateCreated),

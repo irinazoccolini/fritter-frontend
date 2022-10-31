@@ -61,6 +61,7 @@ export default {
       hasBody: false, // Whether or not form request has a body
       setUser: false, // Whether or not stored user (username and userId) should be updated after form submission
       refreshFreets: false, // Whether or not stored freets should be updated after form submission
+      refreshReplies: false, // Whether or not stored replies should be updated after form submission
       alerts: {}, // Displays success/error messages encountered during form submission
       callback: null // Function to run after successful form submission
     };
@@ -76,12 +77,13 @@ export default {
         credentials: 'same-origin' // Sends express-session credentials with request
       };
       if (this.hasBody) {
+        const allFields = this.fields.concat(this.knownFields);
         options.body = JSON.stringify(Object.fromEntries(
-          this.fields.map(field => {
+          allFields.map(field => {
             const {id, value} = field;
             field.value = '';
             return [id, value];
-          })
+          }) 
         ));
       }
 
@@ -102,6 +104,10 @@ export default {
 
         if (this.refreshFreets) {
           this.$store.commit('refreshFreets');
+        }
+
+        if (this.refreshReplies) {
+            this.$store.commit('refreshReplies', [this.$route.params.parentItemType, this.$route.params.parentItemId]);
         }
 
         if (this.callback) {

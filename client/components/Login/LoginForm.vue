@@ -16,6 +16,7 @@ export default {
         {id: 'username', label: 'Username', value: ''},
         {id: 'password', label: 'Password', value: ''}
       ],
+      knownFields: [],
       title: 'Sign in',
       callback: () => {
         console.log("in the callback")

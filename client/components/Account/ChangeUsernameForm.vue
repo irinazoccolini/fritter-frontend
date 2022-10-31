@@ -15,6 +15,7 @@ export default {
       fields: [
         {id: 'username', label: 'Username', value: ''}
       ],
+      knownFields: [],
       title: 'Change username',
       callback: () => {
         const message = 'Successfully changed username!';
