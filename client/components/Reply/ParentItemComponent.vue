@@ -17,7 +17,7 @@
       </p>
       <p class="info">
         Posted at {{ item.dateModified }}
-        <i v-if="item.edited">(edited)</i>
+        <i v-if="!(item.dateModified === item.dateCreated)">(edited)</i>
       </p>
     </article>
   </template>

@@ -53,7 +53,7 @@
       </p>
       <p class="info">
         Posted at {{ reply.dateModified }}
-        <i v-if="reply.edited">(edited)</i>
+        <i v-if="!(reply.dateModified === reply.dateCreated)">(edited)</i>
       </p>
       <section class="alerts">
         <article
@@ -137,14 +137,8 @@
       },
       viewReplies() {
         /**
-         * Updates the current reply in the store when we view replies.
+         * Changes the router to view the replies.
          */
-        // this.$store.commit('updateCurrentParentItem', this.reply);
-        // this.$store.commit('updateCurrentParentType', "reply");
-        // this.$store.commit('refreshReplies');
-        // console.log(this.$store.state.replies);
-        // console.log(this.$store.state.currentParentType);
-        // console.log("here")
         this.$router.push(`/reply/${this.reply._id}/replies`);
       },
       async request(params) {

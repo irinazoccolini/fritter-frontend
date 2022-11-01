@@ -48,7 +48,6 @@ export default {
     name: "ReplyPage",
     components: {ParentItemComponent, ReplyComponent, CreateReplyForm},
     async beforeCreate() {
-        console.log("in before create");
         this.$store.commit('updateCurrentParentType', this.$route.params.parentItemType);
         this.$store.commit('refreshCurrentParentItem', this.$route.params.parentItemId);
         this.$store.commit(`refreshReplies`, [this.$route.params.parentItemType, this.$route.params.parentItemId]);

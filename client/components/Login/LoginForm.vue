@@ -19,7 +19,6 @@ export default {
       knownFields: [],
       title: 'Sign in',
       callback: () => {
-        console.log("in the callback")
         this.$router.push({name: 'Home'});
         this.$store.commit('alert', {
           message: 'You are now signed in!', status: 'success'

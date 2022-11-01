@@ -53,7 +53,7 @@
     </p>
     <p class="info">
       Posted at {{ freet.dateModified }}
-      <i v-if="freet.edited">(edited)</i>
+      <i v-if="!(freet.dateModified === freet.dateCreated)">(edited)</i>
     </p>
     <section class="alerts">
       <article
@@ -137,13 +137,8 @@ export default {
     },
     viewReplies() {
       /**
-       * Updates the current freet in the store when we view replies.
+       * Changes the router to the reply page.
        */
-      // this.$store.commit('updateCurrentParentItem', this.freet);
-      // this.$store.commit('updateCurrentParentType', "freet");
-      // this.$store.commit('refreshReplies');
-      // console.log(this.$store.replies);
-      // console.log(this.$store.currentParentType);
       this.$router.push(`/freet/${this.freet._id}/replies`);
     },
     async request(params) {

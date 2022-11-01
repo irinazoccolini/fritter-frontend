@@ -237,7 +237,6 @@ router.post(
     freetValidator.isValidFreetViewer
   ],
   async (req: Request, res: Response) => {
-    console.log("in the router")
     const replies = await ReplyCollection.findAllByParentFreet(req.params.freetId);
     const response = replies.map(replyUtil.constructReplyResponse);
     res.status(200).json(response);

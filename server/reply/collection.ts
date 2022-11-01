@@ -71,7 +71,7 @@ class ReplyCollection {
      * @return {Promise<HydratedDocument<Reply>[]>} - An array of all of the replies
      */
     static async findAllByParentFreet(freetId: Types.ObjectId | string): Promise<HydratedDocument<Reply>[]>{
-        return ReplyModel.find({parentFreet: freetId}).populate(["authorId", "parentFreet"]);
+        return ReplyModel.find({parentFreet: freetId}).sort({dateModified: -1}).populate(["authorId", "parentFreet"]);
     }
 
     /**
@@ -81,7 +81,7 @@ class ReplyCollection {
      * @return {Promise<HydratedDocument<Reply>[]>} - An array of all of the replies
      */
     static async findAllByParentReply(replyId: Types.ObjectId | string): Promise<HydratedDocument<Reply>[]>{
-        return ReplyModel.find({parentReply: replyId}).populate(["authorId", "parentReply"]);
+        return ReplyModel.find({parentReply: replyId}).sort({dateModified: -1}).populate(["authorId", "parentReply"]);
     }
     
     /**
