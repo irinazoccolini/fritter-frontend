@@ -55,6 +55,15 @@
       Posted at {{ freet.dateModified }}
       <i v-if="!(freet.dateModified === freet.dateCreated)">(edited)</i>
     </p>
+    <button v-if="this.liked" @click="unlikeFreet">
+      ❤️
+    </button>
+    <button v-else @click="likeFreet">
+      🤍
+    </button>
+    <p>
+      {{this.likeCount}} Likes
+    </p>
     <section class="alerts">
       <article
         v-for="(status, alert, index) in alerts"
@@ -77,12 +86,20 @@ export default {
       required: true
     }
   },
+  async created() {
+    const freetLikes = (await fetch(`/api/freets/${this.$options.propsData.freet._id}/likes`).then(async r => r.json())).likes;
+    const freetLikers = freetLikes.map(like => like.likerUsername);
+    this.likeCount = freetLikers.length;
+    this.liked = freetLikers.includes(this.$store.state.username);
+  },
   data() {
     return {
       editing: false, // Whether or not this freet is in edit mode
       draft: this.freet.content, // Potentially-new content for this freet
-      alerts: {} // Displays success/error messages encountered during freet modification
-    };
+      alerts: {}, // Displays success/error messages encountered during freet modification
+      likeCount: null, // How many likes the freet has
+      liked: null, // Whether the current user has liked the freet
+    }; 
   },
   methods: {
     startEditing() {
@@ -98,6 +115,33 @@ export default {
        */
       this.editing = false;
       this.draft = this.freet.content;
+    },
+    likeFreet() {
+      /**
+       * Likes the freet.
+       */
+       const params = {
+        method: 'POST',
+        body: JSON.stringify(),
+        callback: () => {
+          this.liked = true;
+          this.likeCount += 1;
+        }
+      };
+      this.likeRequest(params);
+    },
+    unlikeFreet() {
+      /**
+       * Unlikes the freet.
+       */
+      const params = {
+        method: 'DELETE',
+        callback: () => {
+          this.liked = false;
+          this.likeCount -= 1;
+        }
+      };
+      this.likeRequest(params);
     },
     deleteFreet() {
       /**
@@ -140,6 +184,32 @@ export default {
        * Changes the router to the reply page.
        */
       this.$router.push(`/freet/${this.freet._id}/replies`);
+    },
+    async likeRequest(params) {
+      /**
+       * Submits a request to the freet's like endpoint
+       * @param params - Options for the request
+       * @param params.body - Body for the request, if it exists
+       * @param params.callback - Function to run if the request succeeds
+       */
+       const options = {
+        method: params.method, headers: {'Content-Type': 'application/json'}
+      };
+      if (params.body) {
+        options.body = params.body;
+      }
+
+      try {
+        const r = await fetch(`/api/freets/${this.freet._id}/likes`, options);
+        if (!r.ok) {
+          const res = await r.json();
+          throw new Error(res.error);
+        }
+        params.callback();
+      } catch (e) {
+        this.$set(this.alerts, e, 'error');
+        setTimeout(() => this.$delete(this.alerts, e), 3000);
+      }
     },
     async request(params) {
       /**

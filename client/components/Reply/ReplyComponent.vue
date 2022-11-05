@@ -55,6 +55,15 @@
         Posted at {{ reply.dateModified }}
         <i v-if="!(reply.dateModified === reply.dateCreated)">(edited)</i>
       </p>
+      <button v-if="this.liked" @click="unlikeReply">
+        ❤️
+      </button>
+      <button v-else @click="likeReply">
+        🤍
+      </button>
+      <p>
+        {{this.likeCount}} Likes
+      </p>
       <section class="alerts">
         <article
           v-for="(status, alert, index) in alerts"
@@ -77,11 +86,19 @@
         required: true
       }
     },
+    async created() {
+      const replyLikes = (await fetch(`/api/replies/${this.$options.propsData.reply._id}/likes`).then(async r => r.json())).likes;
+      const replyLikers = replyLikes.map(like => like.likerUsername);
+      this.likeCount = replyLikers.length;
+      this.liked = replyLikers.includes(this.$store.state.username);
+    },
     data() {
       return {
         editing: false, // Whether or not this reply is in edit mode
         draft: this.reply.content, // Potentially-new content for this reply
-        alerts: {} // Displays success/error messages encountered during reply modification
+        alerts: {}, // Displays success/error messages encountered during reply modification
+        likeCount: null, // How many likes this reply has 
+        liked: null, // Whether the current user has liked the reply
       };
     },
     methods: {
@@ -135,11 +152,64 @@
         };
         this.request(params);
       },
+      likeReply() {
+        /**
+         * Likes the reply.
+         */
+        const params = {
+          method: 'POST',
+          body: JSON.stringify(),
+          callback: () => {
+            this.liked = true;
+            this.likeCount += 1;
+          }
+        };
+        this.likeRequest(params);
+      },
+      unlikeReply() {
+        /**
+         * Unlikes the reply.
+         */
+        const params = {
+          method: 'DELETE',
+          callback: () => {
+            this.liked = false;
+            this.likeCount -= 1;
+          }
+        };
+        this.likeRequest(params);
+      },
       viewReplies() {
         /**
          * Changes the router to view the replies.
          */
         this.$router.push(`/reply/${this.reply._id}/replies`);
+      },
+      async likeRequest(params) {
+        /**
+         * Submits a request to the reply's like endpoint
+         * @param params - Options for the request
+         * @param params.body - Body for the request, if it exists
+         * @param params.callback - Function to run if the request succeeds
+         */
+        const options = {
+          method: params.method, headers: {'Content-Type': 'application/json'}
+        };
+        if (params.body) {
+          options.body = params.body;
+        }
+
+        try {
+          const r = await fetch(`/api/replies/${this.reply._id}/likes`, options);
+          if (!r.ok) {
+            const res = await r.json();
+            throw new Error(res.error);
+          }
+          params.callback();
+        } catch (e) {
+          this.$set(this.alerts, e, 'error');
+          setTimeout(() => this.$delete(this.alerts, e), 3000);
+        }
       },
       async request(params) {
         /**
