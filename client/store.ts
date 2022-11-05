@@ -16,7 +16,8 @@ const store = new Vuex.Store({
     userId: null, // User id of the logged in user
     currentParentItem: null, // The current item (freet or reply) that is being viewed 
     currentParentType: null, // The current item type (freet or reply)
-    replies: []
+    replies: [], // The current replies to the reply or freet that 
+    followingFreets: []
   },
   mutations: {
     alert(state, payload) {
@@ -69,6 +70,16 @@ const store = new Vuex.Store({
        * @param type - Type ('freet' or 'reply') to store
        */
       state.currentParentType = type;
+    },
+    async refreshFollowingFreets(state) {
+      /**
+       * Request the server for the currently available freets the 
+       * users that the current user is following
+       */
+      const url = `api/freets/followingFeed`;
+      const res = await fetch(url).then(async r => r.json());
+      state.followingFreets = res;
+      console.log(res);
     },
     async refreshCurrentParentItem(state, itemId){
       /**

@@ -22,7 +22,16 @@
       </article>
     </section>
     <section>
-      <header>
+      <section class="feed-buttons">
+        <button @click="switchToTimeline">
+          Timeline
+        </button>
+        <button @click="switchToFollowing">
+          Following
+        </button>
+      </section>
+
+      <header v-if="this.timeline">
         <div class="left">
           <h2>
             Viewing all freets
@@ -40,8 +49,13 @@
           />
         </div>
       </header>
+      <header v-else>
+        <h2 class="left">
+          Viewing your followers freets
+        </h2>
+      </header>
       <section
-        v-if="$store.state.freets.length"
+        v-if="$store.state.freets.length && this.timeline"
       >
         <FreetComponent
           v-for="freet in $store.state.freets"
@@ -49,8 +63,22 @@
           :freet="freet"
         />
       </section>
+      <section
+        v-if="$store.state.followingFreets.length && !this.timeline"
+      >
+        <FreetComponent
+          v-for="freet in $store.state.followingFreets"
+          :key="freet.id"
+          :freet="freet"
+        />
+      </section>
       <article
-        v-else
+        v-if="!$store.state.followingFreets.length && !this.timeline"
+      >
+        <h3>No freets found. Follow users to see their freets here!</h3>
+      </article>
+      <article
+        v-if="!$store.state.freets.length && this.timeline"
       >
         <h3>No freets found.</h3>
       </article>
@@ -68,7 +96,28 @@ export default {
   components: {FreetComponent, GetFreetsForm, CreateFreetForm},
   mounted() {
     this.$refs.getFreetsForm.submit();
+    this.$store.commit("refreshFollowingFreets");
+  },
+  data() {
+    return {
+      timeline: true
+    }
+  },
+  methods: {
+    switchToFollowing(){
+    /**
+     * Switch the feed view to the following feed
+     */
+    this.timeline = false;
+  },
+  switchToTimeline(){
+    /**
+     * Switch the feed view to the timeline feed.
+     */
+    this.timeline = true;
   }
+  }
+
 };
 </script>
 
@@ -92,5 +141,11 @@ section .scrollbox {
   flex: 1 0 50vh;
   padding: 3%;
   overflow-y: scroll;
+}
+
+.feed-buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
 }
 </style>
