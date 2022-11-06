@@ -46,7 +46,7 @@ router.get(
               overlappingCircleIds.push(circle._id)
             }
           }
-          const visibleReplies = await ReplyCollection.findVisibleReplies(overlappingCircleIds);
+          const visibleReplies = await ReplyCollection.findVisibleReplies(author._id, overlappingCircleIds);
           const response = visibleReplies.map(util.constructReplyResponse);
           res.status(200).json(response);
         }

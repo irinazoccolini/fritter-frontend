@@ -142,8 +142,9 @@ class ReplyCollection {
      * 
      * @param {Types.ObjectId[]} circleIds - list of circle ids
      */
-    static async findVisibleReplies(circleIds: Types.ObjectId[]):  Promise<Array<HydratedDocument<Reply>>> {
+    static async findVisibleReplies(authorId: string | Types.ObjectId, circleIds: Types.ObjectId[]):  Promise<Array<HydratedDocument<Reply>>> {
         return ReplyModel.find({
+        authorId: authorId,
         circle: {
             $in: circleIds.concat([null])
         },

@@ -6,7 +6,10 @@
     class="freet"
   >
     <header>
-      <h3 class="author">
+      <ProfileComponent v-if="!freet.anonymous"
+        :user="freet.author"
+      />
+      <h3 class="author" v-else>
         @{{ freet.author }}
       </h3>
       <div
@@ -77,8 +80,11 @@
 </template>
 
 <script>
+import ProfileComponent from '@/components/Profile/ProfileComponent.vue';
+
 export default {
   name: 'FreetComponent',
+  components: {ProfileComponent},
   props: {
     // Data from the stored freet
     freet: {
@@ -97,8 +103,8 @@ export default {
       editing: false, // Whether or not this freet is in edit mode
       draft: this.freet.content, // Potentially-new content for this freet
       alerts: {}, // Displays success/error messages encountered during freet modification
-      likeCount: null, // How many likes the freet has
-      liked: null, // Whether the current user has liked the freet
+      likeCount: 0, // How many likes the freet has
+      liked: false, // Whether the current user has liked the freet
     }; 
   },
   methods: {

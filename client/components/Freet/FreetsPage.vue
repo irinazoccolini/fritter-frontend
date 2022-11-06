@@ -51,7 +51,7 @@
       </header>
       <header v-else>
         <h2 class="left">
-          Viewing your followers freets
+          Viewing your following's freets
         </h2>
       </header>
       <section

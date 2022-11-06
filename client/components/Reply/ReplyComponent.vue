@@ -97,8 +97,8 @@
         editing: false, // Whether or not this reply is in edit mode
         draft: this.reply.content, // Potentially-new content for this reply
         alerts: {}, // Displays success/error messages encountered during reply modification
-        likeCount: null, // How many likes this reply has 
-        liked: null, // Whether the current user has liked the reply
+        likeCount: 0, // How many likes this reply has 
+        liked: false, // Whether the current user has liked the reply
       };
     },
     methods: {

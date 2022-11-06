@@ -5,7 +5,7 @@ import AccountPage from './components/Account/AccountPage.vue';
 import LoginPage from './components/Login/LoginPage.vue';
 import NotFound from './NotFound.vue';
 import ReplyPage from './components/Reply/ReplyPage.vue';
-
+import ProfilePage from './components/Profile/ProfilePage.vue';
 Vue.use(VueRouter);
 
 const routes = [
@@ -13,8 +13,8 @@ const routes = [
   {path: '/account', name: 'Account', component: AccountPage},
   {path: '/login', name: 'Login', component: LoginPage},
   {path: '*', name: 'Not Found', component: NotFound},
-  // {path: '/replies', name: 'Replies', component: ReplyPage},
-  {path: '/:parentItemType/:parentItemId/replies', name: 'Replies', component: ReplyPage}
+  {path: '/:parentItemType/:parentItemId/replies', name: 'Replies', component: ReplyPage},
+  {path: '/profile/:username', name: 'Profile', component: ProfilePage}
 ];
 
 const router = new VueRouter({routes});
