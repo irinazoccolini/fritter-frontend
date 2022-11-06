@@ -2,10 +2,13 @@
     <main>
         <header>
             <h1>@{{username}}'s profile</h1>
-            <p>0 Followers</p>
-            <p>0 Following</p>
-            <button v-if="username != $store.state.username">
+            <p>{{followers}} Followers</p>
+            <p>{{following}} Following</p>
+            <button v-if="username != $store.state.username && !currentlyFollowing" @click="followUser">
                 Follow
+            </button>
+            <button v-if="username != $store.state.username && currentlyFollowing" @click="unfollowUser">
+                Unfollow
             </button>
             <hr/>
             <section class="profile-feed-buttons">
@@ -58,18 +61,25 @@ export default {
     name: "ProfilePage", 
     components: {FreetComponent, ReplyComponent},
     async beforeCreate() {
-        console.log(this.$route.params.username)
         const freets = (await fetch(`/api/freets?author=${this.$route.params.username}`).then(async r => r.json()));
         this.freets = freets;
         const replies = (await fetch(`/api/replies?author=${this.$route.params.username}`).then(async r => r.json()));
         this.replies = replies;
+        const followers = (await fetch(`/api/users/${this.$route.params.username}/followers`).then(async r=> r.json())).followers;
+        this.followers = followers.length
+        this.currentlyFollowing = followers.map(follower => follower.follower).includes(this.$store.state.username);
+        const following = (await fetch(`/api/users/${this.$route.params.username}/following`).then(async r=> r.json())).following.length;
+        this.following = following
     },
     data () {
         return {
             username: this.$route.params.username,
             freetDisplay: true,
             freets: [],
-            replies: []
+            replies: [],
+            currentlyFollowing: false,
+            following: 0,
+            followers: 0
         }
     },
     methods: {
@@ -84,6 +94,59 @@ export default {
              * View the user's freets
              */
             this.freetDisplay = true;
+        }, 
+        followUser(){
+            /**
+             * Follow the user whose profile you're on
+             */
+            const params = {
+                method: 'POST',
+                body: JSON.stringify(),
+                callback: () => {
+                    this.followers += 1;
+                    this.currentlyFollowing = true;
+                }
+            };
+            this.followRequest(params);
+        },
+        unfollowUser(){
+            /**
+             * Unfollow the user whose profile you're on
+             */
+            const params = {
+                method: 'DELETE',
+                callback: () => {
+                    this.followers -= 1;
+                    this.currentlyFollowing = false;
+                }
+            };
+            this.followRequest(params);
+        },
+        async followRequest(params){
+            /**
+             * Submits a request to the user's followers endpoint.
+             * 
+             * @param params - Options for the request
+             * @param params.body - Body for the request, if it exists
+             * @param params.callback - Function to run if the request succeeds
+             */
+             const options = {
+                method: params.method, headers: {'Content-Type': 'application/json'}
+            };
+            if (params.body) {
+                options.body = params.body;
+            }
+            try {
+                const r = await fetch(`/api/users/${this.$route.params.username}/followers`, options);
+                if (!r.ok) {
+                const res = await r.json();
+                throw new Error(res.error);
+                }
+                params.callback();
+            } catch (e) {
+                this.$set(this.alerts, e, 'error');
+                setTimeout(() => this.$delete(this.alerts, e), 3000);
+            }
         }
     }
 }

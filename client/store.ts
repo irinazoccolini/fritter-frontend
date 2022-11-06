@@ -79,7 +79,6 @@ const store = new Vuex.Store({
       const url = `api/freets/followingFeed`;
       const res = await fetch(url).then(async r => r.json());
       state.followingFreets = res;
-      console.log(res);
     },
     async refreshCurrentParentItem(state, itemId){
       /**

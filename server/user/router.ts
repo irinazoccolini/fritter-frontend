@@ -284,7 +284,7 @@ router.get(
     const followingResponse = following.map(follow => followUtil.constructFollowResponse(follow))
     res.status(200).json({
       message: `The users that user ${req.params.username} is following returned successfully.`,
-      followers: followingResponse
+      following: followingResponse
     });
   }
 );

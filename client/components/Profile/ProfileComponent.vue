@@ -27,8 +27,6 @@ export default {
             /**
              * Changes the router to the profile page of the user that was clicked on.
              */
-            console.log(this.username);
-            // console.log(props);
              this.$router.push(`/profile/${this.username}`);
         }
     }
