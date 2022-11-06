@@ -67,6 +67,9 @@
     <p>
       {{this.likeCount}} Likes
     </p>
+    <button @click="reportFreet">
+      Report
+    </button>
     <section class="alerts">
       <article
         v-for="(status, alert, index) in alerts"
@@ -213,6 +216,35 @@ export default {
         }
         params.callback();
       } catch (e) {
+        this.$set(this.alerts, e, 'error');
+        setTimeout(() => this.$delete(this.alerts, e), 3000);
+      }
+    },
+    async reportFreet(){
+      /**
+       * Posts a request to the freet's report endpoint
+       */
+       const params = {
+        method: 'POST',
+        message: 'Successfully reported freet!',
+        callback: () => {
+          this.$set(this.alerts, params.message, 'success');
+          setTimeout(() => this.$delete(this.alerts, params.message), 3000);
+        }
+      };
+       const options = {
+        method: params.method, headers: {'Content-Type': 'application/json'}
+      };
+      options.body = JSON.stringify();
+      try {
+        const r = await fetch(`/api/freets/${this.freet._id}/reports`, options);
+        if (!r.ok) {
+          const res = await r.json();
+          throw new Error(res.error);
+        }
+        params.callback();
+      } catch (e) {
+        console.log(e)
         this.$set(this.alerts, e, 'error');
         setTimeout(() => this.$delete(this.alerts, e), 3000);
       }

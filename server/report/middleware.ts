@@ -10,9 +10,7 @@ const isFreetReportNotExists = async (req: Request, res: Response, next: NextFun
   const report = validFormat ? await ReportCollection.findOneByFreetAndReporter(req.session.userId, req.params.freetId) : '';
   if (report) {
     res.status(409).json({
-      error: {
-        reportExists: `User with ID ${req.session.userId} has already reported freet with ID ${req.params.freetId}.`
-      }
+      error: `You've already reported this freet.`
     });
     return;
   }
@@ -25,11 +23,9 @@ const isFreetReportNotExists = async (req: Request, res: Response, next: NextFun
 const isReplyReportNotExists = async (req: Request, res: Response, next: NextFunction) => {
   const validFormat = Types.ObjectId.isValid(req.params.replyId);
   const report = validFormat ? await ReportCollection.findOneByReplyAndReporter(req.session.userId, req.params.replyId) : '';
-  if (report.length) {
+  if (report) {
     res.status(409).json({
-      error: {
-        reportExists: `User with ID ${req.session.userId} has already reported reply with ID ${req.params.replyId}.`
-      }
+      error: `You've already reported this reply.`
     });
     return;
   }

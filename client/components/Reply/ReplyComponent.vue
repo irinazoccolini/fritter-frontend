@@ -64,6 +64,9 @@
       <p>
         {{this.likeCount}} Likes
       </p>
+      <button @click="reportReply">
+        Report
+      </button>
       <section class="alerts">
         <article
           v-for="(status, alert, index) in alerts"
@@ -184,6 +187,35 @@
          * Changes the router to view the replies.
          */
         this.$router.push(`/reply/${this.reply._id}/replies`);
+      },
+      async reportReply(){
+        /**
+         * Posts a request to the repys's report endpoint
+         */
+        const params = {
+          method: 'POST',
+          message: 'Successfully reported reply!',
+          callback: () => {
+            this.$set(this.alerts, params.message, 'success');
+            setTimeout(() => this.$delete(this.alerts, params.message), 3000);
+          }
+        };
+        const options = {
+          method: params.method, headers: {'Content-Type': 'application/json'}
+        };
+        options.body = JSON.stringify();
+        try {
+          const r = await fetch(`/api/replies/${this.reply._id}/reports`, options);
+          if (!r.ok) {
+            const res = await r.json();
+            throw new Error(res.error);
+          }
+          params.callback();
+        } catch (e) {
+          console.log(e)
+          this.$set(this.alerts, e, 'error');
+          setTimeout(() => this.$delete(this.alerts, e), 3000);
+        }
       },
       async likeRequest(params) {
         /**
