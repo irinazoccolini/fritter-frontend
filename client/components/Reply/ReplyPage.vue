@@ -24,12 +24,14 @@
             <h3>
                 Replies:
             </h3>
-            <ReplyComponent
+            <div class="replies">
+
+            <ReplyComponent class="reply"
                 v-for="reply in $store.state.replies"
                 :key="reply._id"
                 :reply="reply"
                 />
-            
+            </div>
             </section>
             <article
                 v-else
@@ -54,3 +56,20 @@ export default {
     }
 }
 </script>
+
+<style scoped> 
+
+.replies {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.reply {
+  border: 1px solid #827081;
+  padding: 20px;
+  position: relative;
+  margin: 10px;
+  border-radius: 25px;
+  width: 90%;
+}
+</style>

@@ -6,12 +6,17 @@
       class="reply"
     >
       <header>
-        <h3 class="author">
+        <ProfileComponent class="profile" v-if="!reply.anonymous"
+          :user="reply.author"
+        />
+        <h3 class="author" v-else>
           @{{ reply.author }}
         </h3>
+
+
         <div
           v-if="$store.state.userId === reply.authorId"
-          class="actions"
+          class="author-actions"
         >
           <button
             v-if="editing"
@@ -35,9 +40,7 @@
             🗑️ Delete
           </button>
         </div>
-        <button @click="viewReplies">
-            View Replies
-          </button>
+
       </header>
       <textarea
         v-if="editing"
@@ -55,18 +58,22 @@
         Posted at {{ reply.dateModified }}
         <i v-if="!(reply.dateModified === reply.dateCreated)">(edited)</i>
       </p>
-      <button v-if="this.liked" @click="unlikeReply">
-        ❤️
-      </button>
-      <button v-else @click="likeReply">
-        🤍
-      </button>
-      <p>
-        {{this.likeCount}} Likes
-      </p>
-      <button @click="reportReply">
-        Report
-      </button>
+      <hr/>
+      <div class="general-actions">
+        <button @click="viewReplies">
+            View Replies
+        </button>
+        <button v-if="this.liked" @click="unlikeReply">
+          ❤️ {{this.likeCount}}
+        </button>
+        <button v-else @click="likeReply">
+          🤍 {{this.likeCount}}
+        </button>
+        <button @click="reportReply">
+          Report
+        </button>
+      </div>
+
       <section class="alerts">
         <article
           v-for="(status, alert, index) in alerts"
@@ -80,8 +87,12 @@
   </template>
   
   <script>
+  import ProfileComponent from '@/components/Profile/ProfileComponent.vue';
+
   export default {
+    
     name: 'ReplyComponent',
+    components: {ProfileComponent},
     props: {
       // Data from the stored reply
       reply: {
@@ -275,11 +286,51 @@
   };
   </script>
   
-  <style scoped>
+<style scoped>
   .reply {
       border: 1px solid #111;
       padding: 20px;
       position: relative;
+      background-color: #fbfaff;
   }
-  </style>
+
+header{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.author-actions{
+  padding: 5px;
+}
+
+.profile {
+  padding: 0;
+}
+
+.general-actions{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+
+.likes {
+  display: flex;
+  flex-direction: row;
+}
+
+button{
+  font-size: 16px;
+  border: none;
+  background-color: #1e88e5;
+  margin: 5px;
+  border-radius: 20px;
+  padding: 10px;
+}
+
+.info {
+  font-size: 14px;
+  color: #575757
+}
+</style>
   

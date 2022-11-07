@@ -25,3 +25,15 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+button{
+  font-size: 16px;
+  border: none;
+  background-color: #830700;
+  margin: 5px;
+  border-radius: 20px;
+  padding: 10px;
+  width: 100%
+}
+</style>
