@@ -79,6 +79,21 @@ class CircleCollection {
     }
 
     /**
+     * Edit a circle's members and name.
+     * @param {Types.ObjectId[]} members - the new circle members
+     * @param {string} name - the new circle name
+     * @param {string} circleId - the circle to edit
+     * @returns {Promise<HydratedDocument<Circle>>} - the updated circle
+     */
+    static async updateCircle(circleId: string | Types.ObjectId, members: Types.ObjectId[], name: string): Promise<HydratedDocument<Circle>>{
+        const circle = await CircleModel.findOne({_id: circleId});
+        circle.members = members;
+        circle.name = name;
+        await circle.save();
+        return circle.populate(['creatorId', 'members']);
+    }
+    
+    /**
      * Get a circle by id.
      * 
      * @param {string} circleId - the id of the circle

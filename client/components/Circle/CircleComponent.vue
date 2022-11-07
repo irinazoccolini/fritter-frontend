@@ -2,7 +2,7 @@
     <main class="circle">
 
         <header class="circleInfo">
-           <h3 class="circleTitle">{{circle.name}}</h3>
+           <h2 class="circleTitle">{{circle.name}}</h2>
            <p  class="mutualsInfo" v-if="circle.name === 'Mutuals'">This circle is auto-generated from users that you follow who also follow you back.</p>
            <!-- <h4>Circle Members</h4> -->
            <section class="circleMembers">
@@ -10,16 +10,22 @@
            </section>
 
         </header>
+        <section class="circleButtons" v-if="circle.name !== 'Mutuals'">
+            <button @click="editCircle(circle._id)">Edit</button>
+            <EditCircleModal :circle='circle'/>
+            <button @click="deleteCircle">Delete</button>
+        </section>
 
-        <button class="editButton" @click="editCircle">Edit Circle</button>
     </main>
 </template>
 
 <script>
-import ProfileComponent from "@/components/Profile/ProfileComponent.vue"
+import ProfileComponent from "@/components/Profile/ProfileComponent.vue";
+import EditCircleModal from '@/components/Circle/EditCircleModal.vue';
+
 export default {
     name: "CircleComponent",
-    components: {ProfileComponent},
+    components: {ProfileComponent, EditCircleModal},
     props: {
         circle: {
             type: Object,
@@ -27,10 +33,48 @@ export default {
         }
     }, 
     methods: {
-        editCircle(){
+        editCircle(circleId){
             /**
              * Show the modal to edit the circle
              */
+            console.log(this.$modals)
+            this.$modals.show(`edit-circle-modal-${circleId}`)
+        },
+        async deleteCircle(){
+            /**
+             * Deletes the circle
+             */
+             const params = {
+                method: 'DELETE',
+                callback: () => {
+                    this.$store.commit('alert', {
+                        message: 'Successfully deleted circle!', status: 'success'
+                    });
+                }
+            };
+
+            const options = {
+                    method: params.method, headers: {'Content-Type': 'application/json'}
+                };
+            if (params.body) {
+                options.body = params.body;
+            }
+
+            try {
+                const r = await fetch(`/api/circles/${this.circle._id}`, options);
+                if (!r.ok) {
+                const res = await r.json();
+                throw new Error(res.error);
+                }
+
+                this.$store.commit('refreshCircles');
+
+                params.callback();
+            } catch (e) {
+                this.$set(this.alerts, e, 'error');
+                console.log(this.alerts)
+                setTimeout(() => this.$delete(this.alerts, e), 3000);
+            }
         }
     }
 }
@@ -44,11 +88,19 @@ export default {
     justify-content: space-between;
 }
 
-.editButton{
-    width: 10%;
+.circleButtons {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+}
+button{
+    width: 100%;
     font-size: 16px;
     border: none;
     background-color: #D8D2E1;
+    margin: 5px;
     border-radius: 20px;
     padding: 10px;
 }
