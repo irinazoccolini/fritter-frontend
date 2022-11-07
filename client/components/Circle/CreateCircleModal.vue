@@ -1,7 +1,7 @@
 <template>
-    <main>
+    <vue-modal name="create-circle-modal" transitionName="slide-in-top" title="Create New Circle">
         <header>
-            <h1>Create New Circle</h1>
+            <h2 slot="header">Create New Circle</h2>
         </header>
         <hr/>
         <section class="circleName">
@@ -10,7 +10,9 @@
         </section>
         <hr/>
         <section class="circleMembers">
+
             <h3>Circle Members</h3>
+            <button @click="addMember">Add Member</button>
             <div class="circleMember" v-for="(member,index) in circleMemberUsernames">
                 <input
                     placeholder="Username"
@@ -20,7 +22,6 @@
                 <button @click="deleteMember(index)">Delete Member</button>
             </div>
             <br/>
-            <button @click="addMember">Add Member</button>
 
         </section>  
         <hr/>
@@ -38,13 +39,13 @@
             </article>
         </section>
 
-    </main>
+    </vue-modal>
 </template>
 
 <script>
 
 export default {
-    name: "CreateCircleForm",
+    name: "CreateCircleModal",
     data() {
         return {
             circleName: "",
