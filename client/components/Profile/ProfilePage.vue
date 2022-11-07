@@ -1,7 +1,7 @@
 <template>
     <main>
         <header>
-            <h1>@{{username}}'s profile</h1>
+            <h1>@{{username}}</h1>
             <p>{{followers}} Followers</p>
             <p>{{following}} Following</p>
             <button v-if="username != $store.state.username && !currentlyFollowing" @click="followUser">

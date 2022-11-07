@@ -9,9 +9,8 @@ const isCircleNotExists = async (req: Request, res: Response, next: NextFunction
     const circle = await CircleCollection.findOneByNameAndUser(req.body.name, req.session.userId);
     if (circle){
         res.status(409).json({
-            error: {
-              circleAlreadyExists: `A circle with the name ${req.body.name} already exists for you.` 
-            }
+            error: `A circle with the name ${req.body.name} already exists for you.` 
+            
           });
         return;
     }

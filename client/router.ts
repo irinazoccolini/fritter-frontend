@@ -6,6 +6,8 @@ import LoginPage from './components/Login/LoginPage.vue';
 import NotFound from './NotFound.vue';
 import ReplyPage from './components/Reply/ReplyPage.vue';
 import ProfilePage from './components/Profile/ProfilePage.vue';
+import CirclesPage from './components/Circle/CirclesPage.vue';
+import CreateCircleForm from './components/Circle/CreateCircleForm.vue';
 Vue.use(VueRouter);
 
 const routes = [
@@ -14,7 +16,9 @@ const routes = [
   {path: '/login', name: 'Login', component: LoginPage},
   {path: '*', name: 'Not Found', component: NotFound},
   {path: '/:parentItemType/:parentItemId/replies', name: 'Replies', component: ReplyPage},
-  {path: '/profile/:username', name: 'Profile', component: ProfilePage}
+  {path: '/profile/:username', name: 'Profile', component: ProfilePage},
+  {path: '/circles', name: 'Circles', component: CirclesPage},
+  {path: '/newCircle', name: 'New Circle', component: CreateCircleForm}
 ];
 
 const router = new VueRouter({routes});

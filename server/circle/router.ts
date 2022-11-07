@@ -96,7 +96,7 @@ router.patch(
  * @name POST /api/circles
  * 
  * @param {string} name - the name of the circle
- * @param {string[]} usernames - the usernames of the users to be added to the circle
+ * @param {string} usernames - the comma-separated usernames of the users to be added to the circle
  * @return {CircleResponse} - the newly created circle
  * @throws {403} - if the user is not logged in 
  * @throws {409} - if a circle with the given name already exists
@@ -108,8 +108,8 @@ router.post(
     [
         userValidator.isUserLoggedIn,
         circleValidator.isCircleNotExists,
-        userValidator.isUsersExist,
-        circleValidator.isValidCircleName
+        circleValidator.isValidCircleName,
+        userValidator.isUsersExist
     ],
     async (req: Request, res: Response) => {
         const usernames = req.body.usernames.split(",");

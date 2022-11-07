@@ -17,7 +17,8 @@ const store = new Vuex.Store({
     currentParentItem: null, // The current item (freet or reply) that is being viewed 
     currentParentType: null, // The current item type (freet or reply)
     replies: [], // The current replies to the reply or freet that 
-    followingFreets: []
+    followingFreets: [], // The current freets posted by users that the current user is following
+    circles: [] // The current circles of the user
   },
   mutations: {
     alert(state, payload) {
@@ -71,9 +72,17 @@ const store = new Vuex.Store({
        */
       state.currentParentType = type;
     },
+    async refreshCircles(state) {
+      /**
+       * Request the server for the currently available circles of the user
+       */
+      const url = `api/circles`;
+      const res = await fetch(url).then(async r => r.json());
+      state.circles = res.circles;
+    },
     async refreshFollowingFreets(state) {
       /**
-       * Request the server for the currently available freets the 
+       * Request the server for the currently available freets of the 
        * users that the current user is following
        */
       const url = `api/freets/followingFeed`;

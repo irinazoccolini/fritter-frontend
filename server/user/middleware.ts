@@ -171,13 +171,12 @@ const isAuthorExists = async (req: Request, res: Response, next: NextFunction) =
  */
 const isUsersExist = async(req: Request, res: Response, next: NextFunction) => {
   const usernames = req.body.usernames.split(",");
+  console.log(usernames);
   for (const username of usernames){
     const user = await UserCollection.findOneByUsername(username);
     if (!user){
       res.status(400).json({
-        error: {
-          usernameNotExists: `The username ${username} provided as a member does not exist.`
-        }
+        error: `The username ${username} provided as a member does not exist.`
       });
       return;
     }

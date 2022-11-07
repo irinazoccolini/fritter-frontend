@@ -14,17 +14,23 @@
       <router-link to="/">
         Home
       </router-link>
+      <router-link v-if="$store.state.username"
+        :to="`/profile/${this.$store.state.username}`"
+      >
+        My Profile
+      </router-link>
+      <router-link v-if="$store.state.username"
+        :to="`/circles`"
+      >
+        My Circles
+      </router-link>
       <router-link
         v-if="$store.state.username"
         to="/account"
       >
         Account
       </router-link>
-      <router-link v-if="$store.state.username"
-        :to="`/profile/${this.$store.state.username}`"
-      >
-        My Profile
-      </router-link>
+
       <router-link
         v-else
         to="/login"
