@@ -58,14 +58,12 @@ export default {
             /**
              * Add another input field for members
              */
-            console.log("adding memeber");
             this.circleMemberUsernames.push("");
         },
         deleteMember(index){
             /**
              * Remove a member input field.
              */
-            console.log(index);
             this.circleMemberUsernames.splice(index, 1);
         },
         editUsername(index, newName){
@@ -123,7 +121,6 @@ export default {
                     params.callback();
                 } catch (e) {
                     this.$set(this.alerts, e, 'error');
-                    console.log(this.alerts)
                     setTimeout(() => this.$delete(this.alerts, e), 3000);
                 }
 
