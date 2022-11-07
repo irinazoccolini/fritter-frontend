@@ -163,25 +163,25 @@ export default {
             const options = {
                     method: params.method, headers: {'Content-Type': 'application/json'}
                 };
-                if (params.body) {
-                    options.body = params.body;
+            if (params.body) {
+                options.body = params.body;
+            }
+
+            try {
+                const r = await fetch(`/api/circles/${this.circle._id}`, options);
+                if (!r.ok) {
+                const res = await r.json();
+                throw new Error(res.error);
                 }
 
-                try {
-                    const r = await fetch(`/api/circles/${this.circle._id}`, options);
-                    if (!r.ok) {
-                    const res = await r.json();
-                    throw new Error(res.error);
-                    }
+                this.$store.commit('refreshCircles');
 
-                    this.$store.commit('refreshCircles');
-
-                    params.callback();
-                } catch (e) {
-                    this.$set(this.alerts, e, 'error');
-                    console.log(this.alerts)
-                    setTimeout(() => this.$delete(this.alerts, e), 3000);
-                }
+                params.callback();
+            } catch (e) {
+                this.$set(this.alerts, e, 'error');
+                console.log(this.alerts)
+                setTimeout(() => this.$delete(this.alerts, e), 3000);
+            }
 
         },
     }
