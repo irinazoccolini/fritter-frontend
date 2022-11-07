@@ -21,12 +21,13 @@
         </h3>
       </article>
     </section>
+
     <section v-if="$store.state.username">
       <section class="feed-buttons">
-        <button class="feed-button" @click="switchToTimeline">
+        <button :class="`feed-button ${this.timeline}`" @click="switchToTimeline">
           Timeline
         </button>
-        <button class="feed-button" @click="switchToFollowing">
+        <button :class="`feed-button ${!this.timeline}`" @click="switchToFollowing">
           Following
         </button>
       </section>
@@ -147,7 +148,7 @@ section .scrollbox {
   display: flex;
   flex-direction: row;
   justify-content: center;
-
+  margin-top: 50px;
 }
 
 .freets {
@@ -168,9 +169,16 @@ section .scrollbox {
   width: 100%;
   font-size: 24px;
   border: none;
-  background-color: #D3D3D3;
   margin: 5px;
   border-radius: 20px;
   padding: 10px;
+}
+
+.true{
+  background-color: #1e88e5;
+}
+
+.false{
+  background-color: #D3D3D3;
 }
 </style>

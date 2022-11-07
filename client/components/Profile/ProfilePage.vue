@@ -12,18 +12,18 @@
             </button>
             <hr/>
             <section class="profile-feed-buttons">
-                <button @click="viewFreets">
+                <button :class="`feed-button ${this.freetDisplay}`" @click="viewFreets">
                 Freets
                 </button>
-                <button @click="viewReplies">
+                <button :class="`feed-button ${!this.freetDisplay}`" @click="viewReplies">
                 Replies
                 </button>
             </section>
 
-            <section
+            <section class="feed"
                 v-if="this.freets.length && this.freetDisplay"
             >
-                <FreetComponent
+                <FreetComponent class="freet"
                 v-for="freet in this.freets"
                 :key="freet.id"
                 :freet="freet"
@@ -35,10 +35,10 @@
                 This user hasn't posted any freets yet.
             </section>
 
-            <section
+            <section class="feed"
                 v-if="this.replies.length && !this.freetDisplay"
             >
-                <ReplyComponent
+                <ReplyComponent class="reply"
                 v-for="reply in this.replies"
                 :key="reply.id"
                 :reply="reply"
@@ -155,10 +155,51 @@ export default {
 
 
 <style scoped>
+
+.freet {
+  border: 1px solid #827081;
+  padding: 20px;
+  position: relative;
+  margin: 10px;
+  border-radius: 25px;
+  width: 90%;
+}
+
+.reply {
+  border: 1px solid #827081;
+  padding: 20px;
+  position: relative;
+  margin: 10px;
+  border-radius: 25px;
+  width: 90%;
+}
 .profile-feed-buttons {
   display: flex;
   flex-direction: row;
   justify-content: center;
   margin: 2.5%
+}
+
+.feed-button{
+  width: 100%;
+  font-size: 24px;
+  border: none;
+  margin: 5px;
+  border-radius: 20px;
+  padding: 10px;
+}
+
+.true{
+  background-color: #1e88e5;
+}
+
+.false{
+  background-color: #D3D3D3;
+}
+
+.feed {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 </style>
