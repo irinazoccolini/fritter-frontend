@@ -53,16 +53,24 @@
 <style scoped>
 nav {
     padding: 1vw 2vw;
-    background-color: #ccc;
+    background-color: #42a5f5;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    position: relative;
+    /* position: relative; */
+    position:fixed; /* fixing the position takes it out of html flow - knows
+                   nothing about where to locate itself except by browser
+                   coordinates */
+  left:0;           /* top left corner should start at leftmost spot */
+  top:0;            /* top left corner should start at topmost spot */
+  width:100vw;   
+  z-index: 100;
 }
 
 .title {
     font-size: 32px;
     margin: 0 5px;
+    color: white;
 }
 
 img {
@@ -88,5 +96,10 @@ img {
 
 .alerts {
     width: 25%;
+}
+
+a{
+  text-decoration: none;
+  color: white;
 }
 </style>

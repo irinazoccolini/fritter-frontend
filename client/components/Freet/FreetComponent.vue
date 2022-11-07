@@ -6,41 +6,42 @@
     class="freet"
   >
     <header>
-      <ProfileComponent v-if="!freet.anonymous"
-        :user="freet.author"
-      />
-      <h3 class="author" v-else>
-        @{{ freet.author }}
-      </h3>
-      <div
-        v-if="$store.state.userId === freet.authorId"
-        class="actions"
-      >
-        <button
-          v-if="editing"
-          @click="submitEdit"
+      <div class="upper-section">
+
+
+        <ProfileComponent class="profile" v-if="!freet.anonymous"
+          :user="freet.author"
+        />
+        <h3 class="author" v-else>
+          @{{ freet.author }}
+        </h3>
+        <div
+          v-if="$store.state.userId === freet.authorId"
+          class="author-actions"
         >
-          ✅ Save changes
-        </button>
-        <button
-          v-if="editing"
-          @click="stopEditing"
-        >
-          🚫 Discard changes
-        </button>
-        <button
-          v-if="!editing"
-          @click="startEditing"
-        >
-          ✏️ Edit
-        </button>
-        <button @click="deleteFreet">
-          🗑️ Delete
-        </button>
+          <button
+            v-if="editing"
+            @click="submitEdit"
+          >
+            ✅ Save changes
+          </button>
+          <button
+            v-if="editing"
+            @click="stopEditing"
+          >
+            🚫 Discard changes
+          </button>
+          <button
+            v-if="!editing"
+            @click="startEditing"
+          >
+            ✏️ Edit
+          </button>
+          <button @click="deleteFreet">
+            🗑️ Delete
+          </button>
+        </div>
       </div>
-      <button @click="viewReplies">
-          View Replies
-        </button>
     </header>
     <textarea
       v-if="editing"
@@ -58,18 +59,24 @@
       Posted at {{ freet.dateModified }}
       <i v-if="!(freet.dateModified === freet.dateCreated)">(edited)</i>
     </p>
-    <button v-if="this.liked" @click="unlikeFreet">
-      ❤️
-    </button>
-    <button v-else @click="likeFreet">
-      🤍
-    </button>
-    <p>
-      {{this.likeCount}} Likes
-    </p>
-    <button @click="reportFreet">
-      Report
-    </button>
+  
+    <hr/>
+
+    <div class="general-actions">
+      <button @click="viewReplies">
+        View Replies
+      </button>
+      <button v-if="this.liked" @click="unlikeFreet">
+        ❤️ {{this.likeCount}}
+      </button>
+      <button v-else @click="likeFreet">
+        🤍 {{this.likeCount}}
+      </button>
+      <button @click="reportFreet">
+        Report
+      </button>
+    </div>
+
     <section class="alerts">
       <article
         v-for="(status, alert, index) in alerts"
@@ -79,6 +86,7 @@
         <p>{{ alert }}</p>
       </article>
     </section>
+    
   </article>
 </template>
 
@@ -244,7 +252,6 @@ export default {
         }
         params.callback();
       } catch (e) {
-        console.log(e)
         this.$set(this.alerts, e, 'error');
         setTimeout(() => this.$delete(this.alerts, e), 3000);
       }
@@ -284,9 +291,50 @@ export default {
 </script>
 
 <style scoped>
-.freet {
-    border: 1px solid #111;
-    padding: 20px;
-    position: relative;
+
+.upper-section{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
+.freet {
+  border: 1px solid #111;
+  padding: 20px;
+  position: relative;
+  background-color: #fbfaff;
+}
+
+.author-actions{
+  padding: 5px;
+}
+
+.profile {
+  padding: 0;
+}
+
+.general-actions{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+
+.likes {
+  display: flex;
+  flex-direction: row;
+}
+
+button{
+  font-size: 16px;
+  border: none;
+  background-color: #1e88e5;
+  margin: 5px;
+  border-radius: 20px;
+  padding: 10px;
+}
+
+.info {
+  font-size: 14px;
+  color: #575757
+}
+
 </style>

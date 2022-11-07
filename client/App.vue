@@ -30,6 +30,9 @@ export default {
 </script>
 
 <style>
+
+@import url('https://fonts.googleapis.com/css2?family=Quicksand&display=swap');
+
 * {
   box-sizing: border-box;
 }
@@ -41,6 +44,9 @@ body {
   padding: 0;
   margin: 0;
   font-size: 1.2em;
+  background-color: #e3f2fd;
+  font-family: 'Quicksand', sans-serif;
+  padding-top: 80px; 
 }
 
 main {
@@ -74,6 +80,28 @@ main {
 
 .alerts .success {
     background-color: rgb(45, 135, 87);
+}
+
+h1{
+  font-family: 'Quicksand', sans-serif;
+}
+
+p{
+  font-family: 'Quicksand', sans-serif;
+}
+
+h2{
+  font-family: 'Quicksand', sans-serif;
+}
+
+h3{
+  font-family: 'Quicksand', sans-serif;
+}
+
+button {
+  font-family: 'Quicksand', sans-serif;
+  background-color: #1e88e5;
+  color: white;
 }
 
 </style>

@@ -6,7 +6,7 @@
       <header>
         <h2>Welcome @{{ $store.state.username }}</h2>
       </header>
-      <CreateFreetForm />
+      <CreateFreetForm/>
     </section>
     <section v-else>
       <header>
@@ -21,12 +21,12 @@
         </h3>
       </article>
     </section>
-    <section>
+    <section v-if="$store.state.username">
       <section class="feed-buttons">
-        <button @click="switchToTimeline">
+        <button class="feed-button" @click="switchToTimeline">
           Timeline
         </button>
-        <button @click="switchToFollowing">
+        <button class="feed-button" @click="switchToFollowing">
           Following
         </button>
       </section>
@@ -54,16 +54,16 @@
           Viewing your following's freets
         </h2>
       </header>
-      <section
+      <section class="freets"
         v-if="$store.state.freets.length && this.timeline"
       >
-        <FreetComponent
+        <FreetComponent class="freet"
           v-for="freet in $store.state.freets"
           :key="freet.id"
           :freet="freet"
         />
       </section>
-      <section
+      <section class="freets"
         v-if="$store.state.followingFreets.length && !this.timeline"
       >
         <FreetComponent
@@ -147,5 +147,30 @@ section .scrollbox {
   display: flex;
   flex-direction: row;
   justify-content: center;
+
+}
+
+.freets {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.freet {
+  border: 1px solid #827081;
+  padding: 20px;
+  position: relative;
+  margin: 10px;
+  border-radius: 25px;
+  width: 90%;
+}
+
+.feed-button{
+  width: 100%;
+  font-size: 24px;
+  border: none;
+  background-color: #D3D3D3;
+  margin: 5px;
+  border-radius: 20px;
+  padding: 10px;
 }
 </style>

@@ -37,7 +37,6 @@ export default {
             /**
              * Show the modal to edit the circle
              */
-            console.log(this.$modals)
             this.$modals.show(`edit-circle-modal-${circleId}`)
         },
         async deleteCircle(){
@@ -72,7 +71,6 @@ export default {
                 params.callback();
             } catch (e) {
                 this.$set(this.alerts, e, 'error');
-                console.log(this.alerts)
                 setTimeout(() => this.$delete(this.alerts, e), 3000);
             }
         }
@@ -95,11 +93,12 @@ export default {
     align-items: center;
     justify-content: space-around;
 }
+
 button{
     width: 100%;
     font-size: 16px;
     border: none;
-    background-color: #D8D2E1;
+    background-color: #D3D3D3;
     margin: 5px;
     border-radius: 20px;
     padding: 10px;

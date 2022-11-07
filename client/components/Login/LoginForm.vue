@@ -12,6 +12,8 @@ export default {
       method: 'POST',
       hasBody: true,
       setUser: true,
+      refreshCircles: true,
+      refreshFreets: true,
       fields: [
         {id: 'username', label: 'Username', value: ''},
         {id: 'password', label: 'Password', value: ''}

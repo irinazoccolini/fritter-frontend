@@ -78,6 +78,8 @@ const store = new Vuex.Store({
        */
       const url = `api/circles`;
       const res = await fetch(url).then(async r => r.json());
+      console.log("circles refreshed");
+      console.log(res);
       state.circles = res.circles;
     },
     async refreshFollowingFreets(state) {

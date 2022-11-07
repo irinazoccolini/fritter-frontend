@@ -52,8 +52,10 @@ const router = express.Router();
       return;
     }
     const userCircles = await CircleCollection.findManyByMember(req.session.userId);
+    const userCreatedCircles = (await CircleCollection.findManyByCreatorId(req.session.userId)).map(circle=> circle._id);
     const userCirclesIds = userCircles.map(circle => circle._id);
-    const allFreets = await FreetCollection.findAllViewableFreets(userCirclesIds);
+    const allCircles = userCirclesIds.concat(userCreatedCircles)
+    const allFreets = await FreetCollection.findAllViewableFreets(allCircles);
     const response = allFreets.map(util.constructFreetResponse);
     res.status(200).json(response);
   },
@@ -78,6 +80,7 @@ const router = express.Router();
         }
       }
       const visibleFreets = await FreetCollection.findVisibleFreetsByAuthor(overlappingCircleIds, author._id);
+      console.log(visibleFreets)
       const response = visibleFreets.map(util.constructFreetResponse);
       res.status(200).json(response);
     }

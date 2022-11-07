@@ -62,6 +62,7 @@ export default {
       setUser: false, // Whether or not stored user (username and userId) should be updated after form submission
       refreshFreets: false, // Whether or not stored freets should be updated after form submission
       refreshReplies: false, // Whether or not stored replies should be updated after form submission
+      refreshCircles: false, // Whether or not stored circles should be updated after form submission
       alerts: {}, // Displays success/error messages encountered during form submission
       callback: null // Function to run after successful form submission
     };
@@ -108,6 +109,10 @@ export default {
 
         if (this.refreshReplies) {
             this.$store.commit('refreshReplies', [this.$route.params.parentItemType, this.$route.params.parentItemId]);
+        }
+
+        if (this.refreshCircles){
+          this.$store.commit('refreshCircles');
         }
 
         if (this.callback) {

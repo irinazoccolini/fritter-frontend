@@ -67,7 +67,6 @@ export default {
             this.circleMemberUsernames = [...this.$options.propsData.circle.members];
             this.initialCircleName = this.$options.propsData.circle.name;
             this.initialCircleMemberUsernames = this.$options.propsData.circle.members;
-            console.log(this.$options.propsData.circle.members)
         },
         addMember(){
             /**
@@ -130,7 +129,6 @@ export default {
                     }
                 }
             } else if (this.circleName !== this.initialCircleName){
-                console.log("circle name")
                 params = {
                     method: 'PATCH',
                     message: 'Successfully updated circle!',
@@ -141,9 +139,6 @@ export default {
                     }
                 }
             } else if (!this.arraysEqual(this.circleMemberUsernames,this.initialCircleMemberUsernames)) {
-                console.log(this.circleMemberUsernames)
-                console.log(this.initialCircleMemberUsernames)
-                console.log("usernames")
                 params = {
                     method: 'PATCH',
                     message: 'Successfully updated circle!',
@@ -179,7 +174,6 @@ export default {
                 params.callback();
             } catch (e) {
                 this.$set(this.alerts, e, 'error');
-                console.log(this.alerts)
                 setTimeout(() => this.$delete(this.alerts, e), 3000);
             }
 
