@@ -51,9 +51,6 @@
         </div>
       </header>
       <header v-else>
-        <h2 class="left">
-          Viewing your following's freets
-        </h2>
       </header>
       <section class="freets"
         v-if="$store.state.freets.length && this.timeline"

@@ -1,6 +1,6 @@
 <template>
     <form @submit.prevent="submit">
-        <h3>Create a reply</h3>
+        <h3>Create a reply <span class="reply-length-info">({{this.content.length}}/140 chars)</span></h3>
         <article>
             <div class="content">
                 <textarea @input="updateContent($event.target.value)" rows="5" placeholder="Content">
@@ -169,5 +169,10 @@ button{
     display: flex;
     flex-direction: row;
     justify-content: center;
+}
+
+.reply-length-info{
+  font-size: 16px;
+  color: #575757
 }
 </style>

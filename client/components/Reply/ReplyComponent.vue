@@ -36,7 +36,7 @@
           >
             ✏️ Edit
           </button>
-          <button @click="deleteReply">
+          <button class="delete" @click="deleteReply">
             🗑️ Delete
           </button>
         </div>
@@ -331,6 +331,10 @@ button{
 .info {
   font-size: 14px;
   color: #575757
+}
+
+.delete{
+    background-color: #830700;
 }
 </style>
   

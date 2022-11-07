@@ -11,9 +11,9 @@
 
         </header>
         <section class="circleButtons" v-if="circle.name !== 'Mutuals'">
-            <button @click="editCircle(circle._id)">Edit</button>
+            <button @click="editCircle(circle._id)">✏️ Edit</button>
             <EditCircleModal :circle='circle'/>
-            <button class="delete" @click="deleteCircle">Delete</button>
+            <button class="delete" @click="deleteCircle">🗑️ Delete</button>
         </section>
 
     </main>

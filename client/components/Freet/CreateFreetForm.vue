@@ -1,6 +1,6 @@
 <template>
     <form @submit.prevent="submit">
-        <h3>Create a freet</h3>
+        <h3>Create a freet <span class="freet-length-info">({{this.content.length}}/140 chars)</span></h3>
         <article>
             <div class="content">
                 <textarea @input="updateContent($event.target.value)" rows="5" placeholder="Content">
@@ -173,5 +173,10 @@ button{
     display: flex;
     flex-direction: row;
     justify-content: center;
+}
+
+.freet-length-info{
+  font-size: 16px;
+  color: #575757
 }
 </style>

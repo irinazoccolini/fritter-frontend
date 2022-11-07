@@ -37,7 +37,7 @@
           >
             ✏️ Edit
           </button>
-          <button @click="deleteFreet">
+          <button class="delete" @click="deleteFreet">
             🗑️ Delete
           </button>
         </div>
@@ -337,4 +337,10 @@ button{
   color: #575757
 }
 
+.content {
+  width: 100%;
+}
+.delete{
+    background-color: #830700;
+}
 </style>
