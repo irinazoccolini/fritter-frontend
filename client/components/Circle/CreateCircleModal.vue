@@ -6,7 +6,7 @@
         <hr/>
         <section class="circleName">
             <h3>Circle Name</h3>
-            <input @input="editCircleName($event.target.value)">
+            <input placeholder="Name" @input="editCircleName($event.target.value)">
         </section>
         <hr/>
         <section class="circleMembers">
@@ -19,7 +19,7 @@
                     :value = member
                     @input="editUsername(index, $event.target.value)"
                 />
-                <button @click="deleteMember(index)">Delete Member</button>
+                <button class="delete" @click="deleteMember(index)">Delete Member</button>
             </div>
             <br/>
 
@@ -158,5 +158,22 @@ export default {
 
 .circle-alerts .success {
     background-color: rgb(45, 135, 87);
+}
+
+button{
+  font-size: 16px;
+  border: none;
+  background-color: #1e88e5;
+  margin: 5px;
+  border-radius: 20px;
+  padding: 10px;
+}
+
+.delete{
+    background-color: #830700;
+}
+
+input{
+    font-size: 16px;
 }
 </style>

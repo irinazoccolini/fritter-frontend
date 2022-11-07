@@ -50,6 +50,7 @@ export default {
     position: relative;
     margin: 10px;
     border-radius: 25px;
+    background-color: #fbfaff;
 }
 
 .createCircleButton{
@@ -57,7 +58,7 @@ export default {
     height: 50px;
     font-size: 20px;
     border: none;
-    background-color: #D8D2E1;
+    background-color: #1e88e5;
     border-radius: 20px;
 }
 

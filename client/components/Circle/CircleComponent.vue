@@ -13,7 +13,7 @@
         <section class="circleButtons" v-if="circle.name !== 'Mutuals'">
             <button @click="editCircle(circle._id)">Edit</button>
             <EditCircleModal :circle='circle'/>
-            <button @click="deleteCircle">Delete</button>
+            <button class="delete" @click="deleteCircle">Delete</button>
         </section>
 
     </main>
@@ -98,7 +98,7 @@ button{
     width: 100%;
     font-size: 16px;
     border: none;
-    background-color: #D3D3D3;
+    background-color: #1e88e5;
     margin: 5px;
     border-radius: 20px;
     padding: 10px;
@@ -121,4 +121,8 @@ button{
 .mutualsInfo{
     color: #575757
 }
+.delete{
+    background-color: #830700;
+}
+
 </style>
