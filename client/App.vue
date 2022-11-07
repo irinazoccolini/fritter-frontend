@@ -75,4 +75,5 @@ main {
 .alerts .success {
     background-color: rgb(45, 135, 87);
 }
+
 </style>

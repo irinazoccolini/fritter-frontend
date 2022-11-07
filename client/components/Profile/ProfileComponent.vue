@@ -1,6 +1,6 @@
 <template>
     <main>
-        <header >
+        <header class="username">
             <h3 @click="viewProfile"> @{{user}} </h3>
         </header>
     </main>
@@ -32,3 +32,15 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+.username {
+    width: fit-content;
+    text-align: center;
+    border-radius: 20px;
+    padding-left: 10px;
+    padding-right: 10px;
+    background-color:  #D8D2E1;
+    margin: 0;
+}
+</style>

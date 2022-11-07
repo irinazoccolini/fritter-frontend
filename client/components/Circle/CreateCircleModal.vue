@@ -1,5 +1,5 @@
 <template>
-    <vue-modal name="create-circle-modal" transitionName="slide-in-top" title="Create New Circle">
+    <vue-modal class="modal" name="create-circle-modal" transitionName="slide-in-top" title="Create New Circle">
         <header>
             <h2 slot="header">Create New Circle</h2>
         </header>
@@ -162,5 +162,4 @@ export default {
 .circle-alerts .success {
     background-color: rgb(45, 135, 87);
 }
-
 </style>
