@@ -6,12 +6,18 @@
       class="reply"
     >
       <header>
-        <ProfileComponent class="profile" v-if="!reply.anonymous"
-          :user="reply.author"
-        />
-        <h3 class="author" v-else>
-          @{{ reply.author }}
-        </h3>
+        <div class="top-left">
+          <router-link v-if="this.$route.name.toLowerCase().includes('profile')" :to='`/reply/${this.reply.parentId}/replies`'>
+            View Parent
+          </router-link>
+          <ProfileComponent class="profile" v-if="!reply.anonymous"
+            :user="reply.author"
+          />
+          <h3 class="author" v-else>
+            @{{ reply.author }}
+          </h3>
+        </div>
+
 
 
         <div
@@ -102,6 +108,7 @@
       }
     },
     async created() {
+      console.log(this.$route.name.toLowerCase().includes("profile"))
       const replyLikes = (await fetch(`/api/replies/${this.$options.propsData.reply._id}/likes`).then(async r => r.json())).likes;
       const replyLikers = replyLikes.map(like => like.likerUsername);
       this.likeCount = replyLikers.length;
@@ -337,6 +344,11 @@ button{
 
 .delete{
     background-color: #830700;
+}
+
+.top-left{
+  display: flex;
+  flex-direction: column;
 }
 </style>
   
