@@ -35,6 +35,21 @@ router.beforeEach((to, from, next) => {
       next({name: 'Login'}); // Go to Login page if user navigates to Account and are not signed in
       return;
     }
+
+    if (to.name === 'Replies' && !router.app.$store.state.username) {
+      next({name: 'Login'}); // Go to Login page if user navigates to Replies and are not signed in
+      return;
+    }
+
+    if (to.name === 'Circles' && !router.app.$store.state.username) {
+      next({name: 'Login'}); // Go to Login page if user navigates to Circles and are not signed in
+      return;
+    }
+
+    if (to.name === 'Profile' && !router.app.$store.state.username) {
+      next({name: 'Login'}); // Go to Login page if user navigates to Profile and are not signed in
+      return;
+    }
   }
 
   next();
