@@ -59,7 +59,7 @@
       Posted at {{ freet.dateModified }}
       <i v-if="!(freet.dateModified === freet.dateCreated)">(edited)</i>
     </p>
-  
+    <i class='info' v-if="freet.private">(This freet is private -- only visible by you)</i>
     <hr/>
 
     <div class="general-actions">

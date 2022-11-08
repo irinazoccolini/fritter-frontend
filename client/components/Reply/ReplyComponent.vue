@@ -58,6 +58,7 @@
         Posted at {{ reply.dateModified }}
         <i v-if="!(reply.dateModified === reply.dateCreated)">(edited)</i>
       </p>
+      <i class='info' v-if="reply.private">(This reply is private -- only visible by you)</i>
       <hr/>
       <div class="general-actions">
         <button @click="viewReplies">
