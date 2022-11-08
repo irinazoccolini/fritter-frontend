@@ -7,9 +7,15 @@
     >
       <header>
         <div class="top-left">
-          <router-link v-if="this.$route.name.toLowerCase().includes('profile')" :to='`/reply/${this.reply.parentId}/replies`'>
+          <router-link v-if="this.$route.name.toLowerCase().includes('profile') && this.reply.parentFreet" :to='`/freet/${this.reply.parentFreet}/replies`'>
             View Parent
           </router-link>
+          <router-link v-if="this.$route.name.toLowerCase().includes('profile') && this.reply.parentReply" :to='`/reply/${this.reply.parentReply}/replies`'>
+            View Parent
+          </router-link>
+          <p v-if="this.$route.name.toLowerCase().includes('profile') && !this.reply.parentFreet && !this.reply.parentReply">
+            This reply's parent has been deleted.
+          </p>
           <ProfileComponent class="profile" v-if="!reply.anonymous"
             :user="reply.author"
           />

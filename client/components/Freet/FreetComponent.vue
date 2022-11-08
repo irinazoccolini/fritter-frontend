@@ -280,7 +280,8 @@ export default {
         this.editing = false;
         this.$store.commit('refreshFreets');
         this.$store.commit('refreshProfileFreets');
-
+        this.$store.commit('refreshProfileReplies');
+        
         params.callback();
       } catch (e) {
         this.$set(this.alerts, e, 'error');
