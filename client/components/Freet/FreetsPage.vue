@@ -133,6 +133,7 @@ header, header > * {
 
 button {
     margin-right: 10px;
+    cursor:pointer;
 }
 
 section .scrollbox {
@@ -169,6 +170,7 @@ section .scrollbox {
   margin: 5px;
   border-radius: 20px;
   padding: 10px;
+  cursor:pointer;
 }
 
 .true{

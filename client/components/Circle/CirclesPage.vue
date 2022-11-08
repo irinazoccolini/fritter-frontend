@@ -60,6 +60,7 @@ export default {
     border: none;
     background-color: #1e88e5;
     border-radius: 20px;
+    cursor:pointer;
 }
 
 .createCircle{

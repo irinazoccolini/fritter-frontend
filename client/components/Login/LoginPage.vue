@@ -47,6 +47,8 @@ export default {
   margin: 5px;
   border-radius: 20px;
   padding: 10px;
+  cursor:pointer;
+
 }
 
 </style>

@@ -184,6 +184,7 @@ button{
   margin: 5px;
   border-radius: 20px;
   padding: 10px;
+  cursor:pointer;
 }
 .reply {
   border: 1px solid #827081;
@@ -207,6 +208,8 @@ button{
   margin: 5px;
   border-radius: 20px;
   padding: 10px;
+  cursor:pointer;
+
 }
 
 .true{

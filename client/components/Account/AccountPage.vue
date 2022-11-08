@@ -46,13 +46,14 @@ export default {
   border-radius: 20px;
 }
 
-.button{
+button{
   font-size: 16px;
   border: none;
   background-color: #1e88e5;
   margin: 5px;
   border-radius: 20px;
   padding: 10px;
+  cursor:pointer;
 }
 
 </style>

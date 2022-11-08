@@ -281,7 +281,7 @@ export default {
         this.$store.commit('refreshFreets');
         this.$store.commit('refreshProfileFreets');
         this.$store.commit('refreshProfileReplies');
-        
+
         params.callback();
       } catch (e) {
         this.$set(this.alerts, e, 'error');
@@ -332,6 +332,7 @@ button{
   margin: 5px;
   border-radius: 20px;
   padding: 10px;
+  cursor:pointer;
 }
 
 .info {

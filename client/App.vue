@@ -102,6 +102,7 @@ button {
   font-family: 'Quicksand', sans-serif;
   background-color: #1e88e5;
   color: white;
+  cursor:pointer;
 }
 
 </style>
