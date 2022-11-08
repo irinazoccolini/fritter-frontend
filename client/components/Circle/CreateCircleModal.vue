@@ -1,5 +1,5 @@
 <template>
-    <vue-modal class="modal" name="create-circle-modal" transitionName="slide-in-top" title="Create New Circle">
+    <vue-modal :onShow="showModal" class="modal" name="create-circle-modal" transitionName="slide-in-top" title="Create New Circle">
         <header>
             <h2 slot="header">Create New Circle</h2>
         </header>
@@ -54,6 +54,10 @@ export default {
         }
     },
     methods: {
+        showModal(){
+            this.circleMemberUsernames = [];
+            this.circleName = "";
+        },
         addMember(){
             /**
              * Add another input field for members

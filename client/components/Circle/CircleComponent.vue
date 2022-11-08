@@ -13,7 +13,8 @@
         <section class="circleButtons" v-if="circle.name !== 'Mutuals'">
             <button @click="editCircle(circle._id)">✏️ Edit</button>
             <EditCircleModal :circle='circle'/>
-            <button class="delete" @click="deleteCircle">🗑️ Delete</button>
+            <button class="delete" @click="deleteCircle(circle._id)">🗑️ Delete</button>
+            <DeleteCircleModal :circle="circle"/>
         </section>
 
     </main>
@@ -22,10 +23,10 @@
 <script>
 import ProfileComponent from "@/components/Profile/ProfileComponent.vue";
 import EditCircleModal from '@/components/Circle/EditCircleModal.vue';
-
+import DeleteCircleModal from '@/components/Circle/DeleteCircleModal.vue';
 export default {
     name: "CircleComponent",
-    components: {ProfileComponent, EditCircleModal},
+    components: {ProfileComponent, EditCircleModal, DeleteCircleModal},
     props: {
         circle: {
             type: Object,
@@ -39,41 +40,12 @@ export default {
              */
             this.$modals.show(`edit-circle-modal-${circleId}`)
         },
-        async deleteCircle(){
+        deleteCircle(circleId){
             /**
-             * Deletes the circle
+             * Show the modal to delete the circle
              */
-             const params = {
-                method: 'DELETE',
-                callback: () => {
-                    this.$store.commit('alert', {
-                        message: 'Successfully deleted circle!', status: 'success'
-                    });
-                }
-            };
-
-            const options = {
-                    method: params.method, headers: {'Content-Type': 'application/json'}
-                };
-            if (params.body) {
-                options.body = params.body;
-            }
-
-            try {
-                const r = await fetch(`/api/circles/${this.circle._id}`, options);
-                if (!r.ok) {
-                const res = await r.json();
-                throw new Error(res.error);
-                }
-
-                this.$store.commit('refreshCircles');
-
-                params.callback();
-            } catch (e) {
-                this.$set(this.alerts, e, 'error');
-                setTimeout(() => this.$delete(this.alerts, e), 3000);
-            }
-        }
+            this.$modals.show(`delete-circle-modal-${circleId}`)
+        },
     }
 }
 </script>

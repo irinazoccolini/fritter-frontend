@@ -23,8 +23,13 @@
             <section class="feed"
                 v-if="this.freets.length && this.freetDisplay"
             >
-                <FreetComponent class="freet"
+                <FreetComponent v-if="username!==$store.state.username" class="freet"
                 v-for="freet in this.freets"
+                :key="freet.id"
+                :freet="freet"
+                />
+                <FreetComponent v-if="username===$store.state.username" class="freet"
+                v-for="freet in $store.state.profileFreets"
                 :key="freet.id"
                 :freet="freet"
                 />
@@ -38,8 +43,13 @@
             <section class="feed"
                 v-if="this.replies.length && !this.freetDisplay"
             >
-                <ReplyComponent class="reply"
+                <ReplyComponent v-if="username!==$store.state.username"  class="reply"
                 v-for="reply in this.replies"
+                :key="reply.id"
+                :reply="reply"
+                />
+                <ReplyComponent v-if="username===$store.state.username"  class="reply"
+                v-for="reply in $store.state.profileReplies"
                 :key="reply.id"
                 :reply="reply"
                 />
@@ -66,10 +76,12 @@ export default {
         const replies = (await fetch(`/api/replies?author=${this.$route.params.username}`).then(async r => r.json()));
         this.replies = replies;
         const followers = (await fetch(`/api/users/${this.$route.params.username}/followers`).then(async r=> r.json())).followers;
-        this.followers = followers.length
+        this.followers = followers.length;
         this.currentlyFollowing = followers.map(follower => follower.follower).includes(this.$store.state.username);
         const following = (await fetch(`/api/users/${this.$route.params.username}/following`).then(async r=> r.json())).following.length;
-        this.following = following
+        this.following = following;
+        this.$store.commit('refreshProfileFreets');
+        this.$store.commit('refreshProfileReplies');
     },
     data () {
         return {
@@ -165,6 +177,14 @@ export default {
   width: 90%;
 }
 
+button{
+  font-size: 16px;
+  border: none;
+  background-color: #1e88e5;
+  margin: 5px;
+  border-radius: 20px;
+  padding: 10px;
+}
 .reply {
   border: 1px solid #827081;
   padding: 20px;

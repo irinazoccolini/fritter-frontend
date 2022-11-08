@@ -279,6 +279,7 @@ export default {
 
         this.editing = false;
         this.$store.commit('refreshFreets');
+        this.$store.commit('refreshProfileFreets');
 
         params.callback();
       } catch (e) {

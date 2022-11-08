@@ -18,7 +18,9 @@ const store = new Vuex.Store({
     currentParentType: null, // The current item type (freet or reply)
     replies: [], // The current replies to the reply or freet that 
     followingFreets: [], // The current freets posted by users that the current user is following
-    circles: [] // The current circles of the user
+    circles: [], // The current circles of the user
+    profileFreets: [], // The freets for the current profile
+    profileReplies: [] // The freets for the current profile
   },
   mutations: {
     alert(state, payload) {
@@ -72,14 +74,29 @@ const store = new Vuex.Store({
        */
       state.currentParentType = type;
     },
+    async refreshProfileFreets(state){
+      /**
+       * Request the server for the current available freets of the user
+       */
+      const url = `/api/freets?author=${state.username}`;
+      const res = await fetch(url).then(async r => r.json());
+      state.profileFreets = res;
+    },
+    async refreshProfileReplies(state){
+      /**
+       * Request the server for the current available freets of the user
+       */
+      const url = `/api/replies?author=${state.username}`;
+      const res = await fetch(url).then(async r => r.json());
+      state.profileReplies = res;
+
+    },
     async refreshCircles(state) {
       /**
        * Request the server for the currently available circles of the user
        */
       const url = `api/circles`;
       const res = await fetch(url).then(async r => r.json());
-      console.log("circles refreshed");
-      console.log(res);
       state.circles = res.circles;
     },
     async refreshFollowingFreets(state) {

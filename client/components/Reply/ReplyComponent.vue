@@ -276,6 +276,7 @@
   
           this.editing = false;
           this.$store.commit('refreshReplies', [this.$route.params.parentItemType, this.$route.params.parentItemId]);
+          this.$store.commit('refreshProfileFreets');
           params.callback();
         } catch (e) {
           this.$set(this.alerts, e, 'error');
